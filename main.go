@@ -1,5 +1,13 @@
 package main
 
+/*
+Programming by Kevin Huang
+08/2019
+kevin11206@gmail.com
+web-based Aldelo POS sales monitoring
+Platform: Windows x86/x64
+*/
+
 import (
 	"fmt"
 	_ "log"
