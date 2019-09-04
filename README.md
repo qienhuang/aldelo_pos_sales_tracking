@@ -1,2 +1,2 @@
-# aldelo_pos_sales_tracking
+# Aldelo restaurant POS sales tracking
 Online web-based sales tracking for Aldelo Restaurant POS(desktop version 3.8)
