@@ -1,0 +1,9 @@
+DevMode = true
+ThisHour = 21
+LastHour = 20
+Today = "8/22/2019"
+Yesterday = "8/21/2019"
+ACCESS_DB_CONNECTION_STRING_PRODUCTION = "driver={Microsoft Access Driver (*.mdb)};dbq=\\\\pos-server\\database\\Dumplings House.mdb;SQL_ACCESS_MODE=1"
+MYSQL_DB_CONNECTION_STRING_PRODUCTION = "root:root_password@tcp(localhost:3306)/pos_data?charset=utf8"
+ACCESS_DB_CONNECTION_STRING_DEV = "driver={Microsoft Access Driver (*.mdb)};dbq=Vanessa's Dumplings House.mdb;SQL_ACCESS_MODE=1"
+MYSQL_DB_CONNECTION_STRING_DEV = "root:root_password@tcp(localhost:3306)/pos_data?charset=utf8"

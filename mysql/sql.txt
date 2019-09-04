@@ -1,0 +1,35 @@
+DROP TABLE IF EXISTS  MenuItem_Sale ; 
+CREATE TABLE IF NOT EXISTS  MenuItem_Sale (
+   ID  INT UNSIGNED AUTO_INCREMENT,
+   MenuItemID  INT NOT NULL,
+   MenuItemText  VARCHAR(100),
+   Quantity INT,
+   OrderTime  DATETIME,
+   RestaurantID  INT NOT NULL,
+  PRIMARY KEY (  ID  )
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ DROP TABLE IF EXISTS  Sale_Revenue ;
+ CREATE TABLE IF NOT EXISTS  Sale_Revenue (
+    ID  INT UNSIGNED AUTO_INCREMENT,
+    Revenue  DECIMAL,
+    Date  DATETIME,
+    RestaurantID  INT NOT NULL,
+    PRIMARY KEY (  ID ) 
+  )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  
+ DROP TABLE IF EXISTS  Order_Number ;
+ CREATE TABLE IF NOT EXISTS  Order_Number (
+    ID  INT UNSIGNED AUTO_INCREMENT,
+    OrderNumber  DECIMAL,
+    Date  DATETIME,    
+    RestaurantID  INT NOT NULL,
+    PRIMARY KEY (  ID ) 
+  )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  
+ DROP TABLE IF EXISTS  Restaurant ;
+ CREATE TABLE IF NOT EXISTS  Restaurant (
+    RestaurantID  INT UNSIGNED AUTO_INCREMENT,
+    RestaurantName  VARCHAR(100),
+    PRIMARY KEY (  RestaurantID ) 
+  )ENGINE=InnoDB DEFAULT CHARSET=utf8;
