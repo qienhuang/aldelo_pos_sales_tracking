@@ -1,0 +1,224 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Title</title>
+    <meta name="viewport" conten="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <script src="static/js/jquery-3.4.1.min.js"></script>
+    <script src="static/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style type="text/css">
+        body {
+            background-color: white;
+            font-size: 18px;
+        }
+        
+        .banner_img {
+            background-image: url('/static/img/background.jpg');
+        }
+        
+        #barchart_values {}
+        
+      #revenue{
+        font-size: 32px;
+        text-align: left;
+        color: gray; 
+        font-family: proxima-nova,sans-serif;
+        margin-top: 50px; 
+        margin-left: 150px; 
+      }
+      #revenue span{
+        font-size: 2rem;
+      }
+        
+        #copyright {
+            bottom: 10px;
+            left: 250px;
+            position: relative;
+            <!-- text-align: center;
+            --> color: gray;
+        }
+    </style>
+    <script type="text/javascript">
+        // Google Chart
+    </script>
+</head>
+
+<body>
+    <div id="revenue">
+       Sales:  <span style="color: #ff0000"></span>
+    </div>
+    <!--Div that will hold the Google chart-->
+    <div id="columnchart_values" style="width: 900px;"></div>
+    <br>
+    <div id="barchart_values" style="width: 900px;"></div>
+    <br>
+    <div id="copyright">
+      <h6>Programming by Kevin Huang, 7/2019.</h6>  
+    </div>
+</body>
+<script>
+    $(document).ready(function() {
+        var menuItems;
+        var orderOfHours;
+
+        $.ajax({
+            type: "post",
+            url: '/api/get_menuitem_sales',
+            async: false,
+            data: "",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function(data) {
+
+                menuItems = data.menuItemSales;
+                orderOfHours = data.orders_by_hour;
+                
+                $("#revenue span").text("$ "+data.revenue);
+
+                /*
+                alert("Revenue: "+ data.revenue +"\n\r"
+                  +data.orders_by_hour +"\n\r"
+                  +data.menuItemSales[1].MenuItemID.Int64+"\n\r"
+                  +data.menuItemSales[1].MenuItemText.String +"\n\r"
+                  +data.menuItemSales[1].Quantity.Int64);
+                  */
+            }
+        });
+
+        google.charts.load("current", {
+            packages: ["corechart"]
+        });
+        google.charts.setOnLoadCallback(drawChart_menu);
+
+        function drawChart_menu() {
+            /*
+            var data = google.visualization.arrayToDataTable([
+              ["Element", "Density", { role: "style" } ],
+              ["Copper", 8.94, "#b87333"],
+              ["Silver", 10.49, "silver"],
+              ["Gold", 19.30, "gold"],
+              ["Platinum", 21.45, "color: #e5e4e2"]
+            ]);
+            */
+
+            var menu_data = new google.visualization.DataTable();
+            menu_data.addColumn('string', 'menu'); // Implicit domain label col.
+            menu_data.addColumn('number', 'Sales');
+            menu_data.addColumn({
+                type: "string",
+                role: "style"
+            });
+
+            for (var i = 0; i < menuItems.length; i++) {
+                menu_data.addRows([
+                    [menuItems[i].MenuItemText.String, menuItems[i].Quantity.Int64, "gold"]
+                ]);
+            }
+
+            var view1 = new google.visualization.DataView(menu_data);
+            view1.setColumns([0, 1, {
+                    calc: "stringify",
+                    sourceColumn: 1,
+                    type: "string",
+                    role: "annotation"
+                },
+                2
+            ]);
+
+            var menu_line_height = menuItems.length * 50;
+
+            var options1 = {
+                theme: 'maximized',
+                hAxis: {
+                    textPosition: 'out'
+                },
+                vAxis: {
+                    textPosition: 'out'
+                },
+
+                width: 800,
+                height: menu_line_height,
+                bar: {
+                    groupWidth: "60%"
+                },
+                chartArea: {
+                    left: 10,
+                    top: 20,
+                    width: "100%",
+                    height: "100%"
+                },
+                legend: {
+                    position: 'none'
+                },
+                chartArea: {
+                    left: 250,
+                },
+
+                vAxes: {
+                    textStyle: {
+                        fontSize: 5,
+                    }
+                }
+            };
+            var menu_chart = new google.visualization.BarChart(document.getElementById("barchart_values"));
+            menu_chart.draw(view1, options1);
+        }
+        ////////////////////////////////
+        google.charts.setOnLoadCallback(drawChart_orders);
+
+        function drawChart_orders() {
+
+            var orders_data = new google.visualization.DataTable();
+            orders_data.addColumn('string', 'menu'); // Implicit domain label col.
+            orders_data.addColumn('number', 'Sales');
+            orders_data.addColumn({
+                type: "string",
+                role: "style"
+            });
+
+            for (var i = 9; i < 24; i++) {
+                orders_data.addRows([
+                    [i.toString(), orderOfHours[i], "#b87333"]
+                ]);
+            }
+
+            var view = new google.visualization.DataView(orders_data);
+            view.setColumns([0, 1, {
+                    calc: "stringify",
+                    sourceColumn: 1,
+                    type: "string",
+                    role: "annotation"
+                },
+                2
+            ]);
+
+            var options = {
+                title: "Number of orders in each hour",
+                titleTextStyle: {
+                    fontSize: 24,
+                    color: "gray"
+                },
+                width: 800,
+                height: 400,
+                bar: {
+                    groupWidth: "80%"
+                },
+                legend: {
+                    position: "none"
+                },
+            };
+            var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
+            chart.draw(view, options);
+        }
+
+        // auto refresh every 5 minutes
+        setTimeout("location.reload(true);", 1000 * 60 * 5);
+
+    }); //document.ready
+</script>
+
+</html>
