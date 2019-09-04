@@ -5,7 +5,7 @@ Using packages:
   - github.com/alexbrainman/odbc for accessing MS Access Dabase
   - github.com/go-sql-driver/mysql for accessing MySQL
   - github.com/theherk/viper for TOML config file
-  - github.com/robfig/cron for tasks sheduling
+  - github.com/robfig/cron for tasks scheduling
   - github.com/gin-gonic/gin as Web server
   - developers.google.com/chart/ for data visualization
 
